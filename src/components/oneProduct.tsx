@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { deleteProduct, updateProduct } from "../api/supeAPI";
 import { useStore } from "../store/store";
+import { X, Edit, Trash2 } from "lucide-react";
 
-interface productApi {
+interface ProductApi {
   brand: string;
   category: string;
   created_at: string;
@@ -11,107 +12,136 @@ interface productApi {
   inventory_count: number;
   name: string;
   price: string;
-  // image_urls: [string];
 }
 
-
 export default function OneProduct() {
-  const { oneProduct, setOneProductMode  } = useStore();
-  const [editMode, setEditMode ] = useState(false);
-  const [productObj, setProductObj] = useState<productApi>({
-    brand: '',
-    category: '',
-    created_at: '',
-    description: '',
+  const { oneProduct, setOneProductMode } = useStore();
+  const [editMode, setEditMode] = useState(false);
+  const [productObj, setProductObj] = useState<ProductApi>({
+    brand: "",
+    category: "",
+    created_at: "",
+    description: "",
     id: 0,
     inventory_count: 0,
-    name: '',
-    price: '',
-    // image_urls: ['']
+    name: "",
+    price: "",
   });
-      const { name, price, inventory_count, id, brand, category } = oneProduct;
+  const { name, price, inventory_count, id, brand, category } = oneProduct;
 
   async function deleteThisProduct(id: number) {
-    const question = prompt("do you want to delete this product?");
-    if (question?.toLocaleLowerCase() === "yes") {
+    const question = prompt("Do you want to delete this product?");
+    if (question?.toLowerCase() === "yes") {
       const response = await deleteProduct(id);
       console.log(response); // send an alert
       window.location.reload();
       return;
     }
-
     return null;
   }
 
-
-  function editInputMode(value:boolean){
-    setEditMode(value)
-    setProductObj(oneProduct)
-    }
-
-  function handleInputValue(destination:string,event: React.ChangeEvent<HTMLInputElement> ){
-    setProductObj(prevState => ({...prevState, [destination]: event.target.value}))
+  function editInputMode(value: boolean) {
+    setEditMode(value);
+    setProductObj(oneProduct);
   }
 
-  console.log(productObj)
+  function handleInputValue(
+    destination: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setProductObj((prevState) => ({
+      ...prevState,
+      [destination]: event.target.value,
+    }));
+  }
+
   return (
-    <div className="ring-2 fixed flex flex-col items-center inset-0 backdrop-blur-sm ">
-      <button className="btn" onClick={() => setOneProductMode(false)}>Close</button>
-      <figure className="ring-2 w-72 h-60">
-        <img src="" alt="" />
-      </figure>
-      <div className="flex flex-col gap-4  bg-white">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-75 backdrop-blur-sm overflow-y-auto p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <button
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          onClick={() => setOneProductMode(false)}
+        >
+          <X size={24} />
+        </button>
+
+        <figure className="my-6 w-full h-56 bg-gray-200 rounded-lg overflow-hidden">
+          <img src="" alt="" className="w-full h-full object-cover" />
+        </figure>
+
         {editMode ? (
-          <form className="flex flex-col gap-3 ">
-
-            <label className="input input-bordered flex items-center gap-2" > Name: 
-              <input type="text" name="name" value={productObj.name} onChange={(e) => handleInputValue("name", e) }/>
-            </label>
-
-            <label className="input input-bordered flex items-center gap-2" > Brand: 
-              <input type="text" name="brand" value={productObj.brand} onChange={(e) => handleInputValue("brand", e) } />
-            </label>
-
-            <label className="input input-bordered flex items-center gap-2" > Category: 
-              <input type="text" name="category" value={productObj.category} onChange={(e) => handleInputValue("category", e) }/>
-            </label>
-
-            <label className="input input-bordered flex items-center gap-2" > Price: 
-              <input type="text" name="price" value={productObj.price} onChange={(e) => handleInputValue("price", e) } />
-            </label>
-
-            <label className="input input-bordered flex items-center gap-2" > Inventory Count: 
-              <input type="text" name="inventory_count" value={productObj.inventory_count} onChange={(e) => handleInputValue("inventory_count", e) } />
-            </label>
-
-            <button className="btn" type="submit" onClick={() => updateProduct(productObj, productObj.id,)}> Submit</button>
-            <button className="btn" onClick={() => setEditMode(false)}>Cancel</button>
-          </form> ) : (
-            <div className="w-80 flex flex-col gap-2">
-              <fieldset className="ring-2">
-                <legend className=" bg-white">Name</legend>
-                {name}
-              </fieldset>
-              <fieldset className="ring-2">
-                <legend className=" bg-white">Brand</legend>
-                {brand}
-              </fieldset>
-              <fieldset className="ring-2">
-                <legend className=" bg-white">Category</legend>
-                {category}
-              </fieldset>
-              <fieldset className="ring-2">
-                <legend className=" bg-white">Price</legend>
-                {price}
-              </fieldset>
-              <fieldset className="ring-2">
-                <legend className=" bg-white">Inventory Count</legend>
-                {inventory_count}
-              </fieldset>
-              <button className="btn" onClick={() => editInputMode(true)}>Edit</button>
-              <button className="btn" onClick={() => deleteThisProduct(id)}>Delete</button>
+          <form className="space-y-4">
+            {Object.entries(productObj).map(([key, value]) => {
+              if (
+                key !== "id" &&
+                key !== "created_at" &&
+                key !== "description"
+              ) {
+                return (
+                  <label key={key} className="block">
+                    <span className="text-gray-700 text-sm font-semibold">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}:
+                    </span>
+                    <input
+                      type={key === "inventory_count" ? "number" : "text"}
+                      name={key}
+                      value={value}
+                      onChange={(e) => handleInputValue(key, e)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    />
+                  </label>
+                );
+              }
+              return null;
+            })}
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                type="submit"
+                onClick={() => updateProduct(productObj, productObj.id)}
+              >
+                Submit
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                onClick={() => setEditMode(false)}
+              >
+                Cancel
+              </button>
             </div>
-          )}
+          </form>
+        ) : (
+          <div className="space-y-4">
+            {[
+              { label: "Name", value: name },
+              { label: "Brand", value: brand },
+              { label: "Category", value: category },
+              { label: "Price", value: price },
+              { label: "Inventory Count", value: inventory_count },
+            ].map((field) => (
+              <div key={field.label} className="border-b border-gray-200 pb-2">
+                <span className="text-sm text-gray-500">{field.label}</span>
+                <p className="text-gray-900 font-medium">{field.value}</p>
+              </div>
+            ))}
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={() => editInputMode(true)}
+              >
+                <Edit size={16} className="mr-2" />
+                Edit
+              </button>
+              <button
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                onClick={() => deleteThisProduct(id)}
+              >
+                <Trash2 size={16} className="mr-2" />
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
