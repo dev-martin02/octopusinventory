@@ -57,11 +57,13 @@ export default function NewProductForm() {
     }
   }
 
+  {
+    /* //IS not comming out, why? */
+  }
   return (
     <>
       {newProductMode && (
         <div className="fixed inset-0 z-50 backdrop-blur-sm bg-black/30 flex flex-col items-center justify-center">
-          {/* //IS not comming out, why? */}
           {displayMessage && <AlertMessage message={alertContent} />}
           {loadingState && (
             <div className="absolute inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center">
@@ -69,7 +71,6 @@ export default function NewProductForm() {
             </div>
           )}
           <div className="relative w-full max-w-lg bg-white rounded-lg shadow-xl h-auto overflow-y-auto">
-            {" "}
             <button
               onClick={() => updateNewProductMode(!newProductMode)}
               className="btn btn-sm btn-circle absolute right-2 top-2"
@@ -140,17 +141,21 @@ export default function NewProductForm() {
                 />
               </div>
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="textArea">
                   <span className="label-text">Description</span>
                 </label>
                 <textarea
-                  className="textarea textarea-bordered h-24"
+                  className="textarea textarea-bordered h-32 w-full resize-none "
                   placeholder="Description"
                   name="description"
+                  id="textArea"
                   required
                 ></textarea>
               </div>
-              <button className="btn btn-primary w-full mt-6" type="submit">
+              <button
+                className="btn bg-sky-500 w-full mt-6 text-white hover:bg-sky-600"
+                type="submit"
+              >
                 {" "}
                 Submit
               </button>

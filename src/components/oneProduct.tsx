@@ -57,12 +57,12 @@ export default function OneProduct() {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-75 backdrop-blur-sm overflow-y-auto p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="bg-white relative rounded-lg shadow-xl max-w-md w-full p-6">
         <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           onClick={() => setOneProductMode(false)}
+          className="btn btn-sm btn-circle absolute right-2 top-2"
         >
-          <X size={24} />
+          <X size={20} />
         </button>
 
         <figure className="my-6 w-full h-56 bg-gray-200 rounded-lg overflow-hidden">
