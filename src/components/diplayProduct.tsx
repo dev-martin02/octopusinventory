@@ -48,7 +48,7 @@ export function DisplayProduct() {
     setOneProductMode(true);
   }
   return (
-    <div className="w-11/12 p-2 sm:grid sm:grid-cols-2 lg:grid-cols-3 bg-slate-50 rounded-md ">
+    <div className="w-11/12 flex flex-col gap-3 p-2 sm:grid sm:grid-cols-2 lg:grid-cols-3 bg-slate-50 rounded-md ">
       {loadingProducts ? (
         <>
           <ProductSkeleton />

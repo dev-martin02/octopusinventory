@@ -12,6 +12,7 @@ interface ProductApi {
   inventory_count: number;
   name: string;
   price: string;
+  image_logo: string;
 }
 
 export default function OneProduct() {
@@ -26,8 +27,10 @@ export default function OneProduct() {
     inventory_count: 0,
     name: "",
     price: "",
+    image_logo: "",
   });
-  const { name, price, inventory_count, id, brand, category } = oneProduct;
+  const { name, price, inventory_count, id, brand, category, image_logo } =
+    oneProduct;
 
   async function deleteThisProduct(id: number) {
     const question = prompt("Do you want to delete this product?");
@@ -65,8 +68,8 @@ export default function OneProduct() {
           <X size={20} />
         </button>
 
-        <figure className="my-6 w-full h-56 bg-gray-200 rounded-lg overflow-hidden">
-          <img src="" alt="" className="w-full h-full object-cover" />
+        <figure className="my-6 w-full h-56 bg-gray-200 rounded-lg overflow-hidden flex justify-center items-center ">
+          <img src={image_logo} alt="" className="h-full " />
         </figure>
 
         {editMode ? (

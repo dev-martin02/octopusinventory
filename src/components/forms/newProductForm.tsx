@@ -57,20 +57,18 @@ export default function NewProductForm() {
     }
   }
 
-  {
-    /* //IS not comming out, why? */
-  }
   return (
     <>
       {newProductMode && (
         <div className="fixed inset-0 z-50 backdrop-blur-sm bg-black/30 flex flex-col items-center justify-center">
           {displayMessage && <AlertMessage message={alertContent} />}
-          {loadingState && (
-            <div className="absolute inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
-          )}
+
           <div className="relative w-full max-w-lg bg-white rounded-lg shadow-xl h-auto overflow-y-auto">
+            {loadingState && (
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg"></span>
+              </div>
+            )}
             <button
               onClick={() => updateNewProductMode(!newProductMode)}
               className="btn btn-sm btn-circle absolute right-2 top-2"
